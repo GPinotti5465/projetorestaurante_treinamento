@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, height=device-height">
+    <title>Menu digital</title>
+    <style>
+        body {
+            background-color: black;
+            align-items: center;
+            color: white;
+            font-family: Arial;
+            font-size: 16px;
+        }
+		.button {
+			padding: 10px;
+			margin-right: 6px;
+			border: none;
+			border-radius: 5px;
+			background-color: #333;
+			color: white;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s ease-in-out;
+		}
+		.button:hover {
+			background-color: #555;
+		}
+        input[type='button'] {
+            padding: 10px;
+            margin-left: 6px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .form-container h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container {
+            margin: 5vw; /* 50px */
+            width: 80vw; /* 500px */
+            background-color: #222;
+            border-radius: 10px;
+            padding: 2vw; /* 20px */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            align-items: center;
+        }
+        .input-wrapper {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #333;
+            color: #fff;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            margin-left: 6px;
+            border: none;
+            border-radius: 5px;
+            background-color: #6e6e6e;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .error {
+            color: #f00;
+            margin-top: 10px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #444;
+            min-width: 150px;
+            padding: 10px;
+            z-index: 1;
+        }
+        .dropdown {
+            margin: 7px;
+            margin-bottom: 120px;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            color: #fff;
+            padding: 5px;
+            text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+        .delete-btn, input[type='number'] {
+            padding: 10px;
+            margin-left: 6px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease-in-out;
+        }
+    </style>
+    <script>
+        function showFormmain() {
+            document.getElementById('formpedido').style.display = 'none';
+            document.getElementById('formmain').style.display = 'block';
+        }
+        function showFormpedido() {
+            document.getElementById('formmain').style.display = 'none';
+            document.getElementById('formpedido').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+
+
+
+
+
+
+<!--                   MAIN FORM              -->
+    <div class="form-container" id="formmain">
+        <h1>Hamburgueria nome bom</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+ <div class="dropdown">
+        <span>Cadastros</span>
+        <div class="dropdown-content">
+            <a href="clientes">Clientes</a>
+            <a href="produtos">Produtos</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <span>Relatórios</span>
+        <div class="dropdown-content">
+            <a href="relatoriopedido">Pedidos</a>
+            <a href="extratopedido">Extrato de Pedidos</a>
+        </div>
+    </div> 
+    <input type="button" value="Fazer pedido" onclick="showFormpedido()">
+        </form>
+      </div>
+
+
+
+
+      
+
+<style>
+    #formpedido {
+        position: relative;
+    }
+    #popupitens {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+    }
+    #errorpopup {
+        position: relative;
+    }
+</style>
+
+
+
+
+<!--                       POPUP DE ERRO             -->
+<div class="errorpopup" id=errorpopup style="
+margin: 5vw; /* 50px */
+width: 80vw; /* 500px */
+background-color: #fd8484;
+color: #5f0000;
+border-radius: 10px;
+padding: 2vw; /* 20px */
+align-items: center;
+display: none;
+">
+    <p>Preencha todos os campos corretamente, adicionando nome, um número válido de mesa e no mínimo 1 produto e sua quantidade</p>
+</div>
+
+
+<!--                   FORM DO PEDIDO                -->
+<div class="form-container" id="formpedido">
+    <h1>Fazer pedido</h1>
+    <form action="" method="POST" id="pedidoform">
+        {% csrf_token %}
+
+        <div class="input-wrapper">
+            <label for="nomecliente" style="display: inline-block;">Nome:</label>
+            <input type="text" id="nomecliente" name="nomecliente" style="display: inline-block;
+            width: 50%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #333;
+            color: #fff;" placeholder='Digite seu nome' required>
+        </div>
+
+        <input type="hidden" name="counteritens" id=counteritens>
+        <input type="hidden" name="listprodutos" id=listprodutos>
+        <input type="hidden" name="totalpedido" id=totalpedido>
+        
+        <div class="input-wrapper">
+            <p style="display: inline-block;">Reservar mesa:</p>
+            <input type="number" name="reservmesa" id="reservmesa" style="display: inline-block;" min="1" max="5" required>
+        </div>
+
+      <input type="button" value="adicionar" onclick="popupitens()">
+      <p></p>
+      <ul id="selected-options-list"></ul>
+      
+
+      <p id="total-price">Total: R$0.00</p>
+      <input type="button" value="Confirmar" onclick="submitPedido()">
+      <input type="button" value="Retornar" onclick="showFormmain()">
+    </form>
+    <script>
+        document.getElementById('formpedido').style.display = 'none';
+    </script>
+  </div>
+
+
+
+
+
+
+<!--           POPUP ITENS                         -->
+      <div class="form-container" id="popupitens" style="
+        width: 40vw; /* 400px */
+        max-height: 60vh; /* 240px */
+        margin-top: 10vh; /* 80px */
+        overflow-y: auto;
+        margin-left: 10vw; /* 100px */
+        background-color: #666;
+        border-radius: 10px;
+        padding: 2vw; /* 20px */
+        align-items: center;
+      ">
+      <input type=button onclick="document.getElementById('popupitens').style.display = 'none';" value="x" style="margin-bottom: 5vw">
+        <div id="options-container">
+
+            <div id="options">
+                <!-- aqui vão as opções de produtos renderizadas na parte direita do código-->
+            </div>
+        </div>
+
+
+        <script>
+            document.getElementById('popupitens').style.display = 'none';
+        </script>
+      </div>
+    
+
+
+
+
+<!--                  JAVASCRIPT                  -->
+      <script>
+        var counteritem = 0
+        selectedOptions = ""
+        let totalhide = 0
+
+        function popupitens() {
+            document.getElementById('popupitens').style.display = 'block';
+        }
+
+    
+
+// -------------------------Clicar em uma das opçoes de itens-------------------------
+function addToSelectedOptions(option, price) {
+  counteritem += 1;
+  const li = document.createElement("li");
+  li.style = "margin-bottom: 5px;";
+  li.appendChild(document.createTextNode(option));
+  li.innerHTML += '<button class="delete-btn" onclick="deleteOption(this)">x</button>'; // Add the delete-btn class
+  li.innerHTML += `<input type="number" name="qttitem${counteritem}" id="qttitem${counteritem}" min="1" max="5" required>`;
+  li.innerHTML += `<span class="option-price" style="float: right;">Unit: R$${price}</span>`;
+  document.getElementById("selected-options-list").appendChild(li);
+
+  selectedOptions += option;
+  selectedOptions += "@";
+  document.getElementById('popupitens').style.display = 'none';
+  
+  const qttInput = li.querySelector(`#qttitem${counteritem}`);
+  const priceElement = li.querySelector('.option-price');
+  const unitPrice = Number(priceElement.innerHTML.split('R$')[1]);
+  let subtotalItem = unitPrice;
+  
+  qttInput.addEventListener('input', () => {
+    const qtt = qttInput.value;
+    subtotalItem = qtt * unitPrice;
+    
+    const oldSubtotalItem = Number(qttInput.getAttribute('data-subtotal'));
+    const totalElement = document.getElementById('total-price');
+    const currentTotal = Number(totalElement.textContent.split('R$')[1]);
+    const newTotal = currentTotal - oldSubtotalItem + subtotalItem;
+    totalhide = newTotal
+    totalElement.textContent = `Total: R$${newTotal.toFixed(2)}`;
+    qttInput.setAttribute('data-subtotal', subtotalItem);
+  });
+  
+  qttInput.setAttribute('data-subtotal', subtotalItem);
+  
+  const totalElement = document.getElementById('total-price');
+  const currentTotal = Number(totalElement.textContent.split('R$')[1]);
+  totalhide = currentTotal + subtotalItem
+  totalElement.textContent = `Total: R$${(currentTotal + subtotalItem).toFixed(2)}`;
+}
+
+
+
+
+// ---------------------Remover item----------------------
+function deleteOption(button) {
+  const li = button.parentElement;
+  const priceElement = li.querySelector('.option-price');
+  const unitPrice = Number(priceElement.innerHTML.split('R$')[1]);
+  const qttInput = li.querySelector('input[type="number"]');
+  const qtt = Number(qttInput.value);
+  const subtotalItem = qtt * unitPrice;
+
+  // Remove the selected option from the list
+  li.remove();
+  counteritem -= 1;
+
+  // Update the total price
+  const totalElement = document.getElementById('total-price');
+  const currentTotal = Number(totalElement.textContent.split('R$')[1]);
+  totalhide = currentTotal - subtotalItem
+  totalElement.textContent = `Total: R$${currentTotal - subtotalItem.toFixed(2)}`;
+}
+
+
+
+// ---------------------Botão de confirmar-------------------
+        function submitPedido() {
+        // Submit the form and send counteritem value to the server
+            document.getElementById("counteritens").value = counteritem;
+            document.getElementById("listprodutos").value = selectedOptions;
+            document.getElementById("totalpedido").value = totalhide;
+            document.getElementById("pedidoform").submit();
+        }
+
+
+// ---------------------Checagem de erro----------------------
+        var errortest = "{{error}}"
+        if (errortest == 1) {
+            document.getElementById('formmain').style.display = 'none';
+            document.getElementById('formpedido').style.display = 'block';
+            document.getElementById('popupitens').style.marginTop = '220px';
+            document.getElementById('errorpopup').style.display = 'block';
+        }
+
+
+
+
+// ----------------Carregando produtos de forma dinâmica-----------
+
+const optionsContainer = document.getElementById('options');
+
+const listArray = JSON.parse("{{listaprodutos|escapejs}}");
+const pricesArray = JSON.parse("{{listaprecos|escapejs}}");
+
+for (let i = 0; i < listArray.length; i++) {
+    const optionContainer = document.createElement('div');
+    optionContainer.classList.add('option-container');
+
+  const optionButton = document.createElement('input');
+  optionButton.type = 'button';
+  optionButton.name = 'option';
+  optionButton.value = listArray[i];
+  optionButton.onclick = function() {
+    addToSelectedOptions(listArray[i], pricesArray[i]);
+  };
+
+  const optionPrice = document.createElement('span');
+  optionPrice.classList.add('option-price');
+  optionPrice.innerText = `R$${pricesArray[i]}`;
+
+  optionContainer.appendChild(optionButton);
+  optionContainer.appendChild(optionPrice);
+
+  optionsContainer.appendChild(optionContainer);
+}
+
+
+
+
+
+/*
+// -----------------------Caixa de pesquisa--------------------
+function filterOptions(searchTerm) {
+  const filteredList = listArray.filter((option) => option.toLowerCase().includes(searchTerm.toLowerCase()));
+  renderFilteredOptions(filteredList);
+}
+
+function renderFilteredOptions(filteredList) {
+  const optionsContainer = document.querySelector('#options');
+  optionsContainer.innerHTML = '';
+  for (let i = 0; i < filteredList.length; i++) {
+    const optionContainer = document.createElement('div');
+    optionContainer.classList.add('option-container');
+
+    const optionButton = document.createElement('button');
+    optionButton.classList.add('option-button');
+    optionButton.innerText = filteredList[i];
+    optionButton.value = i;
+    optionButton.style = "padding: 10px;margin-left: 6px;border: none;border-radius: 5px;background-color: #333;color: white;cursor: pointer;font-size: 16px;transition: background-color 0.3s ease-in-out;";
+    optionButton.onclick = () => addToSelectedOptions(listArray.indexOf(filteredList[i]), pricesArray.indexOf(filteredList[i]));
+
+    const optionPrice = document.createElement('span');
+    optionPrice.classList.add('option-price');
+    optionPrice.innerText = `$${pricesArray[listArray.indexOf(filteredList[i])]}`;
+
+    optionContainer.appendChild(optionButton);
+    optionContainer.appendChild(optionPrice);
+    optionsContainer.appendChild(optionContainer);
+  }
+}
+const searchBox = document.querySelector('#searchBox');
+searchBox.addEventListener('input', (e) => {
+  const searchTerm = e.target.value;
+  filterOptions(searchTerm);
+});
+*/
+
+
+</script>
+
+
+
+    <style>
+        .option-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .option-price {
+            font-weight: bold;
+        }
+    </style>
+    </body>
+</html>

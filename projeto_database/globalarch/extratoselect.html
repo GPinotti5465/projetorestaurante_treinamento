@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Seleção de extrato</title>
+	<style>
+		body {
+			background-color: black;
+			color: white;
+			font-family: Arial;
+			font-size: 16px;
+		}
+		.bar {
+			display: flex;
+			align-items: center;
+			height: 50px;
+			background-color: gray;
+			padding: 0 20px;
+		}
+		.button {
+			padding: 10px;
+			margin-right: 6px;
+			border: none;
+			border-radius: 5px;
+			background-color: #333;
+			color: white;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s ease-in-out;
+		}
+		.button:hover {
+			background-color: #555;
+		}
+		.container {
+			margin: 50px;
+			border: 1px solid white;
+			padding: 20px;
+		}
+		form {
+			margin-top: 20px;
+			display: flex;
+			flex-direction: column;
+		}
+		label {
+			margin-top: 10px;
+		}
+		select, input[type="range"], input[type="number"], button[type="submit"] {
+			margin-bottom: 10px;
+			background-color: #333;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s ease-in-out;
+		}
+		select:hover, input[type="range"]:hover, input[type="checkbox"]:hover, button[type="submit"]:hover {
+			background-color: #555;
+		}
+		.form-check {
+			margin-bottom: 20px;
+		}
+		.form-check-label {
+		display: flex;
+		align-items: center;
+		}
+		.checkbox {
+		display: flex;
+		align-items: center;
+		}
+
+	</style>
+    </head>
+    <body>
+        <div class="bar">
+            <input type="button" value="< Retornar" onclick="window.location.href='http://127.0.0.1:8000';" class="button">
+        </div>
+        <div class="container">
+            <h2>Seleção de extrato</h2>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="form-group form-check">
+					<p>Selecione um pedido entre 1 e {{maximo}}</p>
+                    <input type="number" name="pedidoselecionado" id="pedidoselecionado" min="1" max="{{maximo}}" required>
+                </div>
+            <button type="submit" class="btn btn-primary">Gerar</button>
+        </form>
+    </div>
+</body>
+</html>
+    
